@@ -1,4 +1,0 @@
-{
-  "researcher": "[Research Assistant | researcher]\nGoal: Find key insights about electric vehicles\nTools used:\n- Python tool executed successfully\nResult: Task completed successfully.",
-  "writer": "[Content Writer | writer]\nGoal: Write a concise summary using the research\nContext received:\n- From researcher: [Research Assistant | researcher]\nGoal: Find key insights about electric vehicles\nTools used:\n- Python tool executed successfully\nResult: Task completed successfully.\nResult: Task completed successfully."
-}
