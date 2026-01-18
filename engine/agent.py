@@ -1,3 +1,11 @@
+import os
+
+try:
+    from openai import OpenAI
+except ImportError:
+    OpenAI = None
+
+
 class Agent:
     def __init__(self, agent_id, role, goal, tools=None):
         self.id = agent_id
@@ -7,44 +15,53 @@ class Agent:
 
     def run(self, context):
         """
-        Simulate agent execution.
-        The agent receives shared context and produces an output.
+        Execute agent logic.
+        Uses OpenAI if API key is present, otherwise falls back to mock output.
         """
-        context_summary = ""
 
-        if context:
-            context_summary = "\n".join(
-                f"- From {k}: {v}" for k, v in context.items()
+        prompt = f"""
+Role: {self.role}
+Goal: {self.goal}
+
+Context:
+{context}
+"""
+
+        api_key = os.getenv("OPENAI_API_KEY")
+
+        # --- OpenAI path ---
+        if api_key and OpenAI:
+            client = OpenAI(api_key=api_key)
+
+            response = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                    {"role": "system", "content": "You are a helpful autonomous agent."},
+                    {"role": "user", "content": prompt},
+                ],
             )
 
+            return (
+                f"[{self.role} | {self.id}]\n"
+                f"{response.choices[0].message.content.strip()}"
+            )
+
+        # --- Mock fallback (safe default) ---
         output = (
             f"[{self.role} | {self.id}]\n"
             f"Goal: {self.goal}\n"
         )
 
-        if context_summary:
+        if context:
+            context_summary = "\n".join(
+                f"- From {k}: {v}" for k, v in context.items()
+            )
             output += f"Context received:\n{context_summary}\n"
 
-        # Tool execution (MCP-style support)
         if self.tools:
-            tool_results = self.run_tools()
             output += "Tools used:\n"
-            for result in tool_results:
-                output += f"- {result}\n"
+            for tool in self.tools:
+                output += f"- {tool}\n"
 
         output += "Result: Task completed successfully."
         return output
-
-    def run_tools(self):
-        """
-        Simulate tool execution.
-        """
-        results = []
-        for tool in self.tools:
-            if tool == "python":
-                results.append("Python tool executed successfully")
-            elif tool == "web":
-                results.append("Web tool invoked")
-            else:
-                results.append(f"Unknown tool: {tool}")
-        return results
