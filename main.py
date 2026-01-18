@@ -21,6 +21,15 @@ def build_agents(agent_configs):
         )
         agents[agent.id] = agent
 
+        # Create subagents if present
+        for sub_cfg in agent_cfg.get("subagents", []):
+            subagent = Agent(
+                agent_id=sub_cfg["id"],
+                role=sub_cfg["role"],
+                goal=sub_cfg["goal"],
+            )
+            agent.subagents.append(subagent)
+
     return agents
 
 

@@ -12,6 +12,7 @@ class Agent:
         self.role = role
         self.goal = goal
         self.tools = tools or []
+        self.subagents = []
 
     def run(self, context):
         """
@@ -29,7 +30,7 @@ Context:
 
         api_key = os.getenv("OPENAI_API_KEY")
 
-        # --- OpenAI path ---
+        # --- OpenAI path (optional) ---
         if api_key and OpenAI:
             client = OpenAI(api_key=api_key)
 
@@ -46,7 +47,7 @@ Context:
                 f"{response.choices[0].message.content.strip()}"
             )
 
-        # --- Mock fallback (safe default) ---
+        # --- Mock fallback (default / safe) ---
         output = (
             f"[{self.role} | {self.id}]\n"
             f"Goal: {self.goal}\n"
@@ -62,6 +63,13 @@ Context:
             output += "Tools used:\n"
             for tool in self.tools:
                 output += f"- {tool}\n"
+
+        # --- Run subagents (hierarchical execution) ---
+        if self.subagents:
+            output += "\nSubagents executed:\n"
+            for subagent in self.subagents:
+                subagent.run(context)
+                output += f"- {subagent.id} completed\n"
 
         output += "Result: Task completed successfully."
         return output
