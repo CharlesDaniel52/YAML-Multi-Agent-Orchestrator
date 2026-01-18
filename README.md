@@ -88,8 +88,6 @@ workflow:
     - agent: writer
 ```
 
----
-
 ### Parallel Workflow Example
 
 ```yaml
